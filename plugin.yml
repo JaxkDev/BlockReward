@@ -8,7 +8,7 @@ version: 1.0.0
 api:
 - 3.0.0-ALPHA12
 
-main: Jackthehack21\BlockReward\Main
+main: Jackthehack21\BlockReward\main
 
 commands:
   blockreward:
