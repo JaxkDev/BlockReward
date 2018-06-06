@@ -1,0 +1,25 @@
+---
+name: BlockReward
+
+author: Jackthehack21
+
+version: 1.0.0
+
+api:
+- 3.0.0-ALPHA12
+
+main: Jackthehack21\BlockReward\Main
+
+commands:
+  blockreward:
+    description: Send an message to Discord!
+    permission: reward
+    usage: /blockreward < help / on / off / edit >
+    aliases:
+    - bl
+    - reward
+    
+permissions:
+    reward:
+        default: op
+...
