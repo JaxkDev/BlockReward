@@ -1,5 +1,15 @@
 ---
 
 debug: false
+#This is advised to be left at false unless told to enable by a contributer.
+
+enabled: true
+#true/false to turn off/on the plugin in-game.
+
+
+
+money_addon: false
+#money addon means it gives the option to givemoney when breaking/placing a block.
+#only supports EconomyAPI for now.
 
 ---
