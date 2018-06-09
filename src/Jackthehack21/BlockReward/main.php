@@ -43,6 +43,26 @@ class main extends PluginBase implements Listener
         if ($cmd->getName() == 'blockreward') {
             if(isset($args[0])){
                 switch(strtolower($args[0])){
+                    case 'disable':
+                    case 'off':
+                        if($this->cfg->get('enabled') == false){
+                            $sender->sendMessage(C::YELLOW.'BlockReward is already disabled');
+                            break;
+                        }
+                        $this->cfg->set('enabled', false);
+                        $this->cfg->save(true);
+                        $sender->sendMessage(C::GREEN.'BlockReward is now Disabled !');
+                        break;
+                    case 'enable':
+                    case 'on':
+                        if($this->cfg->get('enabled') == true){
+                            $sender->sendMessage(C::YELLOW.'BlockReward is already enabled');
+                            break;
+                        }
+                        $this->cfg->set('enabled', true);
+                        $this->cfg->save(true); //USE TRUE FOR ASYNC
+                        $sender->sendMessage(C::GREEN.'BlockReward is now Enabled !');
+                        break;
                     case 'credits':
                         $sender->sendMessage(C::GOLD.'==== '.C::RED.'CREDITS'.C::GOLD.' ====');
                         $sender->sendMessage(C::AQUA.'Developers:');
@@ -51,8 +71,10 @@ class main extends PluginBase implements Listener
                     case '?':
                     case 'help':
                         $sender->sendMessage(C::GOLD.'==== '.C::AQUA.'HELP'.C::GOLD.' ====');
-                        $sender->sendMessage(C::GREEN.'/blockreward help '.C::BLACK.'- '.C::GOLD.'Show the help page.');
+                        $sender->sendMessage(C::GREEN.'/blockreward help    '.C::BLACK.'- '.C::GOLD.'Show the help page.');
                         $sender->sendMessage(C::GREEN.'/blockreward credits '.C::BLACK.'- '.C::GOLD.'Who made me, find out here.');
+                        $sender->sendMessage(C::GREEN.'/blockreward on|off  '.C::BLACK.'- '.C::GOLD.'Toggle the plugin on/off.');
+                        
                         break;
                     default:
                         $sender->sendMessage(C::RED.'Unkown Command, try /blockreward help');
