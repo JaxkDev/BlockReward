@@ -43,13 +43,19 @@ class main extends PluginBase implements Listener
         if ($cmd->getName() == 'blockreward') {
             if(isset($args[0])){
                 switch(strtolower($args[0])){
+                    case 'credits':
+                        $sender->sendMessage(C::GOLD.'==== '.C::RED.'CREDITS'.C::GOLD.' ====');
+                        $sender->sendMessage(C::AQUA.'Developers:');
+                        $sender->sendMessage(C::GREEN.'• Jackthehaxk21');
+                        break;
+                    case '?':
                     case 'help':
-                        $sender->sendMessage(C::GOLD.'==== '.C::AQUA.'Help'.C::GOLD.' ====');
+                        $sender->sendMessage(C::GOLD.'==== '.C::AQUA.'HELP'.C::GOLD.' ====');
                         $sender->sendMessage(C::GREEN.'/blockreward help '.C::BLACK.'- '.C::GOLD.'Show the help page.');
                         $sender->sendMessage(C::GREEN.'/blockreward credits '.C::BLACK.'- '.C::GOLD.'Who made me, find out here.');
                         break;
                     default:
-                        $sender->sendMessage(C::RED.'Not a valid arg, try /blockreward help');
+                        $sender->sendMessage(C::RED.'Unkown Command, try /blockreward help');
                         break;
                 }
             } else {
