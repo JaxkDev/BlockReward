@@ -3,13 +3,18 @@
 namespace Jackthehack21\BlockReward;
 
 use pocketmine\Player;
+use pocketmine\Server;
 use pocketmine\item\Item;
 use pocketmine\block\Block;
 use pocketmine\utils\Config;
 use pocketmine\event\Listener;
+use pocketmine\command\Command;
+use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat as C;
-use pocketmine\event\player\{PlayerJoinEvent, PlayerQuitEvent, PlayerDeathEvent, PlayerChatEvent};;
+use pocketmine\lang\TranslationContainer;
+//use pocketmine\event\player\{PlayerJoinEvent, PlayerQuitEvent, PlayerDeathEvent, PlayerChatEvent};;
 use pocketmine\event\block\{BlockBreakEvent};;
+use pocketmine\event\entity\EntityDamageEvent;
 
 class BlockEvents implements Listener
 {
@@ -26,22 +31,51 @@ class BlockEvents implements Listener
             return;
         }
         $block = $event->getBlock();
-        $this->main->getLogger()->info($block->getName().'-'.$block->getId());
         if (isset($this->main->cfg->get('blocks')[str_replace(' ','_',strtolower($block->getName()))])) {
             $player = $event->getPlayer();
             $event->setCancelled();
             $player->getLevel()->setBlock($block, new Block(Block::AIR), true, true);
-            $this->main->getLogger()->info(serialize($this->main->cfg->get('blocks')[str_replace(' ','_',strtolower($block->getName()))]));
-            foreach($this->main->cfg->get('blocks')[str_replace(' ','_',strtolower($block->getName()))][0] as $next){
-                if(substr($next, 0, 1 ) === "£" || substr($next, 0, 1 ) === "$"){
-                    if(isset($this->main->economy)){
+            foreach($this->main->cfg->get('blocks')[str_replace(' ','_',strtolower($block->getName()))] as &$next){
+                if($next[0] == "£" || $next[0] == "$"){
+                    if(isset($this->main->economy) == true){
                         //there is money plugin so lets add some dough
-                        settype($next, "integer");
-                        $this->main->economy->addMoney($player, $next);
-                        $player->sendMessage('£'.$next.' Has been put in your bank');
+                        $new = str_replace('$','',$next);
+                        settype($new, "integer");
+                        $this->main->economy::getInstance()->addMoney($player, $new);
+                        $player->sendMessage(C::GOLD.$next.C::GREEN.' Has been put in your account !');
                     }
-                } else {
-                    //check if block but how
+                }
+                if($next == 'kill'){
+                    $this->main->getServer()->getPluginManager()->callEvent($ev = new EntityDamageEvent($player, EntityDamageEvent::CAUSE_SUICIDE, 1000));
+				    if($ev->isCancelled()){
+                        return true;
+                    }
+                    $player->setLastDamageCause($ev);
+                    $player->setHealth(0);
+                    Command::broadcastCommandMessage($player, new TranslationContainer("commands.kill.successful", [$player->getName()]));
+                }
+                if($next == 'survival'){
+                    $gameMode = Server::getGamemodeFromString($next);
+		            if($gameMode != -1){
+                        $player->setGamemode($gameMode);
+                    } else {
+                        if($this->main->cfg->get('debug') == true){
+                            $this->main->getLogger()->warning('Invalid game mode ('.$next.') set in config.yml');
+                        }
+                    }
+                }
+                if($next == 'creative'){
+                    $gameMode = Server::getGamemodeFromString($next);
+		            if($gameMode != -1){
+                        $player->setGamemode($gameMode);
+                    } else {
+                        if($this->main->cfg->get('debug') == true){
+                            $this->main->getLogger()->warning('Invalid game mode ('.$next.') set in config.yml');
+                        }
+                    }
+                }
+                if($next == 'fly'){
+                    $player->setAllowFlight(true);
                 }
             }
         }
