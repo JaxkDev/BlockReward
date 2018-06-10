@@ -12,4 +12,8 @@ money_addon: false
 #money addon means it gives the option to givemoney when breaking/placing a block.
 #only supports EconomyAPI for now.
 
+blocks:
+  diamond_block:
+    - 'gold_ore'
+    - '£900'
 ---

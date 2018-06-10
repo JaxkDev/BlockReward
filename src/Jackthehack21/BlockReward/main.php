@@ -13,6 +13,8 @@ use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\command\ConsoleCommandSender;
 
+use Jackthehack21\BlockReward\BlockEvents;
+
 
 class main extends PluginBase implements Listener
 {
@@ -24,10 +26,22 @@ class main extends PluginBase implements Listener
 
         $this->saveResource("config.yml");
         $this->cfg = new Config($this->getDataFolder()."config.yml", Config::YAML, []);
+        if($this->cfg->get('money_addon') == true){
+            if ($this->getServer()->getPluginManager()->getPlugin('EconomyAPI') == true) {
+                $this->economy = $this->getServer()->getPluginManager()->getPlugin('EconomyAPI');
+                if($this->cfg->get('debug')){
+                    $this->getLogger()->info('[BlockReward] - Money Addon loaded !');
+                }
+            } else {
+                if($this->cfg->get('debug')){
+                    $this->getServer()->getLogger()->warning('[BlockReward] - Money Addon (EconomyAPI) not found !');
+                }
+            }
+        }
         if($this->cfg->get('debug')){
             $this->getLogger()->info('[BlockReward] - Plugin enabled !');
         }
-        $this->getServer()->getPluginManager()->registerEvents($this, $this);
+        $this->getServer()->getPluginManager()->registerEvents(new BlockEvents($this), $this);
         
     }
 
@@ -65,8 +79,8 @@ class main extends PluginBase implements Listener
                         break;
                     case 'credits':
                         $sender->sendMessage(C::GOLD.'==== '.C::RED.'CREDITS'.C::GOLD.' ====');
-                        $sender->sendMessage(C::AQUA.'Developers:');
-                        $sender->sendMessage(C::GREEN.'• Jackthehaxk21');
+                        $sender->sendMessage(C::GREEN.'Developers:');
+                        $sender->sendMessage(C::RED.'• '.C::GREEN.'Jackthehaxk21');
                         break;
                     case '?':
                     case 'help':
