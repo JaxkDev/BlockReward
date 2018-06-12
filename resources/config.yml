@@ -8,11 +8,11 @@ enabled: true
 
 money_addon: false
 #money addon means it gives the option to givemoney when breaking/placing a block.
-#only supports EconomyAPI for now.
+#only supports EconomyAPI.
 
 blocks:
   dirt:
-    - 'fly'
+    - 'kill'
 
 # EXAMPLE :
 # blocks:
